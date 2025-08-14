@@ -1,0 +1,42 @@
+zabbix_export:
+  version: '7.4'
+  template_groups:
+    - uuid: 846977d1dfed4968bc5f8bdb363285bc
+      name: 'Templates/Operating systems'
+  templates:
+    - uuid: 957b44f69c5542199cbf47ab0e4507e9
+      template: 'dnf updates'
+      name: 'dnf updates'
+      groups:
+        - name: 'Templates/Operating systems'
+      items:
+        - uuid: 810d80748d0b431fba65d89f576f3c4d
+          name: 'updates count'
+          key: dnf.updates.count
+          delay: 6h
+          history: 7d
+          timeout: 2m
+          tags:
+            - tag: component
+              value: dnf
+          triggers:
+            - uuid: 9febc02ce4bf47d0a9160e63860a880e
+              expression: 'last(/dnf updates/dnf.updates.count)>0'
+              name: 'Updates are redy to install'
+              priority: WARNING
+              manual_close: 'YES'
+        - uuid: 90c4e6a3fb4949c69d6dadb4957b5de0
+          name: 'security updates count'
+          key: dnf.updates.security.count
+          delay: 6h
+          history: 7d
+          timeout: 5m
+          tags:
+            - tag: component
+              value: dnf
+          triggers:
+            - uuid: d02813f1477a4dc4bec58a01cf8b2ac0
+              expression: 'last(/dnf updates/dnf.updates.security.count)>0'
+              name: 'Security updates are redy to install'
+              priority: HIGH
+              manual_close: 'YES'
